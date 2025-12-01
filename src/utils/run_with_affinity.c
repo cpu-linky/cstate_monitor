@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int run_with_affinity(int cpu, void (*func)(void)) {
+int run_with_affinity(int cpu, void (*func)(void*), void* args) {
 
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);          // empty the cpu list
@@ -18,7 +18,7 @@ int run_with_affinity(int cpu, void (*func)(void)) {
     }
 
     //finally run the function
-    func();
+    func(args);
 
     return 0;
 }
