@@ -10,8 +10,8 @@ from env import (
 data_line_re = r"^\d(\s).*$"
 time_line_re = r"\d*\.\d* sec"
 data_line_format = ["Core", "CPU", "Avg_MHz", "Busy%", "Bzy_MHz", 
-                    "TSC_MHz", "IPC", "IRQ", "NMI", "SMI", "POLL", 
-                    "C1", "C2", "C3", "POLL%", "C1%", "C2%", "C3%", 
+                    "TSC_MHz", "IPC", "IRQ", "NMI", "SMI", 
+                    "POLL%", "C1%", "C2%", "C3%", 
                     "CorWatt", "PkgWatt","Duration"]
 experiments = { "CPU" : CPU_LOG_PATH,
                 "MEMORY" : MEMORY_LOG_PATH,
