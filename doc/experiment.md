@@ -25,3 +25,9 @@ The outline of the experiment is :
 4. Run all load test with turbostat recording
 5. Export results
 6. Rerun the experiment with a different governor
+
+## Note
+
+The new version of `io_load` uses a pre made file of 1Go of random data from `/dev/urandom`. To generate it you can use :
+
+    dd if=/dev/urandom of=random.bin bs=1M count=1024

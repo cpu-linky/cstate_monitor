@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-// dump a 25Mo buffer of random data (/dev/urandom) into a dump file
+// dump a 25Mo buffer of random data (pre made file) into a dump file
 int dump_io(){
     int fd_in, fd_out;
     size_t size = 1024*1024*25;
@@ -14,9 +14,9 @@ int dump_io(){
         return -1;
     }
 
-    fd_in = open("/dev/urandom", O_RDONLY);
+    fd_in = open("random.bin", O_RDONLY);
     if(fd_in < 0){
-        perror("Error opening /dev/urandom");
+        perror("Error opening targeted file");
         free(buffer);
         return -1;
     }
