@@ -3,10 +3,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-// dump a 25Mo buffer of random data (pre made file) into a dump file
-int dump_io(){
+// dump a buffer of random data (pre made file) into a dump file
+int dump_io(int n_mo){
     int fd_in, fd_out;
-    size_t size = 1024*1024*25;
+    size_t size = 1024*1024*n_mo;
     char *buffer = malloc(size); // Allocation sur le tas
 
     if (buffer == NULL) {
@@ -27,7 +27,7 @@ int dump_io(){
     }
     close(fd_in);
 
-    fd_out = open("dump", O_WRONLY | O_CREAT | O_TRUNC | O_SYNC, 0644);
+    fd_out = open("dump", O_WRONLY | O_CREAT | O_SYNC, 0644);
     if(fd_out < 0){
         perror("Error opening dump");
         free(buffer);
@@ -50,19 +50,26 @@ int dump_io(){
     return 0;
 }
 
+void purge_cache(){
+    system("sync");
+    system("echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null");
+}
+
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage : %s <loop>\n", argv[0]);
+    if (argc != 3) {
+        fprintf(stderr, "Usage : %s <loop> <buff_size>\n", argv[0]);
         return 1;
     }
 
     int loop = atoi(argv[1]);
+    int dump_size = atoi(argv[2]);
     for (int i = 0; i < loop; i++) {
-        if (dump_io() != 0) {
+        // purge_cache();
+        if (dump_io(dump_size) != 0) {
             return 1;
         }
     }
 
-    printf("#| Dumped %d * 25MB of random data to dump.bin\n", loop);
+    printf("#| Dumped %d * %dMB of random data to dump.bin\n", loop, dump_size);
     return 0;
 }
