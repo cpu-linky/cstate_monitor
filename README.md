@@ -23,7 +23,7 @@ Make sure that `turbostat` is installed and in your Path. Then, simply run :
 - [x] format output to enable post processing
 
 FIO bencmark (changer pour construire de la lexture )
-Désactiver des c states 
+Désactiver des c states OK
 Mesurer la fréquence périodique 
 Est ce que il baisse la fréquence puis C?
 Creuser inférence 
