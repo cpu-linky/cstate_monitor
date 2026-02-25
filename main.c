@@ -9,6 +9,11 @@
 #include "src/env/env.h"
 #include "src/utils/utils.h"
 
+void purge_cache(){
+    system("sync");
+    system("echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null");
+}
+
 int main() {
     // Load env and build commands
     load_env_file("config.env");
@@ -21,6 +26,7 @@ int main() {
     int n_memory = atoi(getenv("N_MEMORY"));
     char *memory_log_path = getenv("MEMORY_LOG_PATH");
 
+    int io_purge_cache = atoi(getenv("IO_PURGE_CACHE"));
     char *io_n_dumps = getenv("IO_N_DUMPS");
     char *io_random_offset = getenv("IO_RANDOM_OFFSET");
     char *io_size_dump = getenv("IO_SIZE_DUMP");
@@ -138,6 +144,10 @@ int main() {
             dup2(fd, STDOUT_FILENO);
             dup2(fd, STDERR_FILENO);
             close(fd);
+
+            if (io_purge_cache == 1){
+                purge_cache();
+            }
 
             execvp(command_io[0], command_io);
             perror("[ERROR] execvp failed for io load");
