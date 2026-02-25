@@ -2,9 +2,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 
 // dump a buffer of random data (pre made file) into a dump file
-int dump_io(int n_mo){
+int dump_io(int n_mo, int is_random){
     int fd_in, fd_out;
     size_t size = 1024*1024*n_mo;
     char *buffer = malloc(size); // Allocation sur le tas
@@ -19,6 +20,17 @@ int dump_io(int n_mo){
         perror("Error opening targeted file");
         free(buffer);
         return -1;
+    }
+
+    // move the cursor to a random offset if is_random = 1
+    if (is_random == 1) {
+        off_t random_offset = rand() % size;
+        if (lseek(fd_in, random_offset, SEEK_SET) == -1){
+            perror("Error seeking offset");
+            close(fd_in);
+            free(buffer);
+            return -1;
+        }
     }
 
     ssize_t result = read(fd_in, buffer, size);
@@ -56,16 +68,18 @@ void purge_cache(){
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        fprintf(stderr, "Usage : %s <loop> <buff_size>\n", argv[0]);
+    if (argc != 4) {
+        fprintf(stderr, "Usage : %s <loop> <buff_size> <is_random>\n", argv[0]);
         return 1;
     }
 
+    srand(time(NULL));
     int loop = atoi(argv[1]);
     int dump_size = atoi(argv[2]);
+    int is_random = atoi(argv[3]);
     for (int i = 0; i < loop; i++) {
         // purge_cache();
-        if (dump_io(dump_size) != 0) {
+        if (dump_io(dump_size, is_random) != 0) {
             return 1;
         }
     }

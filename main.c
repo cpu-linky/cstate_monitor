@@ -22,6 +22,7 @@ int main() {
     char *memory_log_path = getenv("MEMORY_LOG_PATH");
 
     char *io_n_dumps = getenv("IO_N_DUMPS");
+    char *io_random_offset = getenv("IO_RANDOM_OFFSET");
     char *io_size_dump = getenv("IO_SIZE_DUMP");
     int n_io = atoi(getenv("N_IO"));
     char *io_log_path = getenv("IO_LOG_PATH");
@@ -44,7 +45,7 @@ int main() {
     char *command_io[] = {
         "turbostat", "--quiet", "--interval", "1", "--cpu", cpu_target_load,
         "taskset", "-c", cpu_target_load, 
-        "bin/io_load", io_n_dumps, io_size_dump, NULL
+        "bin/io_load", io_n_dumps, io_size_dump, io_random_offset, NULL
     };
 
     // set affinity for main process
