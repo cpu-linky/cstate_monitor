@@ -65,9 +65,11 @@ int main() {
     int   n_io             = atoi(getenv("N_IO"));
     char *io_log_path      = getenv("IO_LOG_PATH");
 
-    char* sleep_duration = getenv("SLEEP_DURATION");
+    char* sleep_duration_ms = getenv("SLEEP_DURATION_MS");
+    char *sleep_duration_ns = getenv("SLEEP_DURATION_NS");
     char* sleep_count = getenv("SLEEP_COUNT");
     char *sleep_log_path = getenv("SLEEP_LOG_PATH");
+    char* sleep_print_duration = getenv("SLEEP_PRINT_DURATION");
     int n_sleep = atoi(getenv("N_SLEEP"));
 
     char *cpu_target_load      = getenv("CPU_TARGET_LOAD");
@@ -94,7 +96,7 @@ int main() {
     char *command_sleep[] = {
         "turbostat", "--quiet", "--interval", "1", "--cpu", cpu_target_load,
         "taskset", "-c", cpu_target_load, 
-        "bin/sleep_load", sleep_duration, sleep_count, NULL
+        "bin/sleep_load", sleep_duration_ms, sleep_duration_ns, sleep_count, sleep_print_duration, NULL
     };
 
     set_affinity(cpu_target_turbostat);
