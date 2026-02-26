@@ -4,7 +4,8 @@ import numpy as np
 from env import (
     CPU_LOG_PATH,
     MEMORY_LOG_PATH,
-    IO_LOG_PATH
+    IO_LOG_PATH,
+    SLEEP_LOG_PATH
 )
 
 data_line_re = r"^\d(\s).*$"
@@ -15,7 +16,8 @@ data_line_format = ["Core", "CPU", "Avg_MHz", "Busy%", "Bzy_MHz",
                     "CorWatt", "PkgWatt","Duration", "Duration_Std"]
 experiments = { "CPU" : CPU_LOG_PATH,
                 "MEMORY" : MEMORY_LOG_PATH,
-                "IO" : IO_LOG_PATH}
+                "IO" : IO_LOG_PATH,
+                "SLEEP" : SLEEP_LOG_PATH}
 
 # On initialise les colonnes avec d'abord les noms des types de données
 # Note: On garde data_line_format pour l'affichage, mais on utilisera une taille adaptée pour le parsing
@@ -25,7 +27,7 @@ columns_to_stack = [np.array(data_line_format)]
 header_names = ["DataType"]
 
 # On force l'ordre d'itération pour s'assurer que les colonnes soient toujours dans le même ordre (CPU, MEM, IO)
-experiment_order = ["CPU", "MEMORY", "IO"]
+experiment_order = ["CPU", "MEMORY", "IO", "SLEEP"]
 
 # main loop :
 for experiment_type in experiment_order:

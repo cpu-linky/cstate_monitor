@@ -16,7 +16,7 @@ void purge_cache() {
 
 static void run_load(const char *name, char *const *command, const char *log_path,
                      int n_cycles, int do_purge_cache) {
-                        
+
     printf("[INFO] %s test begins : %d cycles\n", name, n_cycles);
     for (int i = 0; i < n_cycles; i++) {
         pid_t pid = fork();
@@ -65,6 +65,11 @@ int main() {
     int   n_io             = atoi(getenv("N_IO"));
     char *io_log_path      = getenv("IO_LOG_PATH");
 
+    char* sleep_duration = getenv("SLEEP_DURATION");
+    char* sleep_count = getenv("SLEEP_COUNT");
+    char *sleep_log_path = getenv("SLEEP_LOG_PATH");
+    int n_sleep = atoi(getenv("N_SLEEP"));
+
     char *cpu_target_load      = getenv("CPU_TARGET_LOAD");
     int   cpu_target_turbostat = atoi(getenv("CPU_TARGET_TURBOSTAT"));
 
@@ -86,11 +91,18 @@ int main() {
         "bin/io_load", io_n_dumps, io_size_dump, io_random_offset, NULL
     };
 
+    char *command_sleep[] = {
+        "turbostat", "--quiet", "--interval", "1", "--cpu", cpu_target_load,
+        "taskset", "-c", cpu_target_load, 
+        "bin/sleep_load", sleep_duration, sleep_count, NULL
+    };
+
     set_affinity(cpu_target_turbostat);
 
     run_load("CPU",    command_cpu, cpu_log_path,    n_cpu,    0);
     run_load("Memory", command_mem, memory_log_path, n_memory, 0);
     run_load("I/O",    command_io,  io_log_path,     n_io,     io_purge_cache);
+    run_load("Sleep", command_sleep, sleep_log_path, n_sleep, 0);
 
     return 0;
 }
