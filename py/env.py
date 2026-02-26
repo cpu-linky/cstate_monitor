@@ -19,3 +19,5 @@ MEMORY_LOG_PATH = os.getenv("MEMORY_LOG_PATH")
 IO_N_DUMPS = os.getenv("IO_N_DUMPS")
 N_IO = os.getenv("N_IO")
 IO_LOG_PATH = os.getenv("IO_LOG_PATH")
+
+SLEEP_LOG_PATH = os.getenv("SLEEP_LOG_PATH")
